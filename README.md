@@ -1,44 +1,41 @@
-# simploncloud
+# Du IaaS au SaaS, par script !
 
-#Contexte du projet
-Après avoir vu l'architecture IaaS, vous allez vous familiariser au SaaS ainsi qu'à Azure-Cli, tout en découvrant GIT
+# CREATE EXACT LOCATION:
+	 az account list-locations -o table
 
-#Modalités pédagogiques
-Travail de groupe mais 1 commit individuel (1 branche au nom de l'apprenant)
+# CREATE AZURE RESOURCE GROUP:
 
-#Utiliser :
+	az group create -l northcentralus -n EmainResource
 
-1 Plan App Service
+# CREATE A STANDARD APP SERVICE PLAN WITH LINUX:
+	
+	az appservice plan create --name EmainPlan --resource-group EmainResource --sku FREE --is-linux
 
-1 App Service avec PHP
+# CREATE A WEB APP:
+	
+	az webapp create --resource-group EmainResource --plan EmainPlan --name EmainAppService --runtime 'PHP|7.4' --deployment-local-git
 
-1 Service MariaDb (sécurisé)
+# BROWSE YOUR WEBSITE:
 
-​
+	http://<app-name>.azurewebsites.net
+  
+# CREATE AN AZURE DATABASE FOR MARIADB SERVER
 
-#PHPMyAdmin doit être configuré
+	az mariadb server create --resource-group EmainResource --name EmainDB  --location northcentralus --admin-user myadmin --admin-password <server_admin_password> --sku-name GP_Gen5_2 --version 10.2
 
-​
+# CONFIGURE FIREWALL RULE	
 
-Les infos pour cloner le git :
+	az mariadb server firewall-rule create --resource-group EmainResource --server EmainDB --name AllowMyIP --start-ip-address 192.168.0.1 --end-ip-address 192.168.0.1
 
-​
+# SSL SETTINGS(disables SSL):
+	
+	az mariadb server update --resource-group EmainResource --name EmainDB --ssl-enforcement Disabled
 
-https://dev.azure.com/P20AdminCloud/Sandbox/_git/LAMP_SaaS user git : ybardin mdp git : 4dydtoththcjckx4bh4wjnwwznci6mycjsotsjlvvetvzpmzoprq
+# GET ACCESS CREDENTIALS
 
-#Critères de performance
-La documentation donne toutes les informations nécessaires pour que n'importe quel utilisateur ayant accès à Azure puisse arriver au résultat final : groupe de ressources, ressources, phpmyadmin accessible depuis l'extérieur.
+	az mariadb server show --resource-group EmainResource --name EmainDB
 
-La documentation peut indiquer si des modifications sont à faire dans le script avant de l'exécuter (paramètres).
+# CONNECT TO YOUR SERVER
 
-#BONUS : Un script BASH permet de rendre l'installation intéractive en demandant à l'utilisateur les paramètres utilisés dans le script d'installation.
+	mysql -h mydemoserver.mariadb.database.azure.com -u myadmin@mydemoserver -p
 
-#BONUS 2 : Créer un annuaire des gares avec votre web app  avec Injection des données dans le BDD
-
-#Livrables
-1 numéro de commit contenant : 
-- le script Azure-Cli à exécuter
-- une documentation technique sous forme de fichier "readme.md", écrit en MarkDown.
-- BONUS : 1 fichier .sh pour demander les paramètres.
-
-(voir les ressources pour avoir l'URL dans laquelle faire le PUSH)
