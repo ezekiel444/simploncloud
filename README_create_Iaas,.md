@@ -1,6 +1,6 @@
 echo "Welcome To Complete Guide To Create Your Saas App From The Command Line Yahhhh!!!!!"
-echo "please note your desired location, you will need it"
 	 az account list-locations --output table
+echo "please lookup the table above and provide a location"
 $location = read-host "Enter your location"
 	
 $resourceName = read-host "Enter a resource name"	
