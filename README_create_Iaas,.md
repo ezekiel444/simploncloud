@@ -4,14 +4,14 @@ echo "please lookup the table above and provide a location"
 $location = read-host "Enter your location"
 	
 $resourceName = read-host "Enter a resource name"	
-$appServicePlan = read-host "Enter your app service plan"
+$appServicePlan = read-host "Enter your app service plan name"
 $appServiceName = read-host "Enter your web app name"
 $dbName = read-host "Enter your mariaDb name"
 $username = read-host "Enter your username for mariadb"
 $password = read-host "Enter your password for mariadb"		
 az group create -l $location -n $resourceName
-az appservice plan create --name $appServicePlan --resource-group $resourceName --sku FREE --is-linux
-az webapp create --resource-group $resourceName --plan $appServiceName --name $appServiceName --runtime 'PHP|7.4' --deployment-local-git
+az appservice plan create -g $resourceName -n $appServicePlan --is-linux --sku S1
+az webapp create --resource-group $resourceName --plan $appServicePlan --name $appServiceName --runtime 'PHP|7.4'
 echo "BROWSE YOUR WEBSITE: on http://$appServiceName.azurewebsites.net"
 	az mariadb server create --resource-group $resourceName --name $dbName  --location $location --admin-user $username --admin-password $password --sku-name GP_Gen5_2 --version 10.2
 	az mariadb server firewall-rule create --resource-group $resourceName --server $dbName --name AllowMyIP --start-ip-address 192.168.0.1 --end-ip-address 192.168.0.1

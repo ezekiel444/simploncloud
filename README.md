@@ -39,3 +39,34 @@
 
 	mysql -h mydemoserver.mariadb.database.azure.com -u myadmin@mydemoserver -p
 
+#PHPMYADMIN Installation version_4.9.7
+
+
+
+	#connect your ssh from your app app service
+	goto /home/site/wwwroot 
+	
+	wget https://files.phpmyadmin.net/phpMyAdmin/4.9.7/phpMyAdmin-4.9.7-all-languages.tar.gz
+
+	#create a folder called phpmyadmin
+		/home/site/wwwroot/phpmyadmin
+	#extract your downloaded file into phpmyadmin folder
+		tar -xvf files.phpmyadmin.net/phpMyAdmin/4.9.7/phpMyAdmin-4.9.7-all-languages.tar
+
+	#duplicate(copy) your config.sample.inc.php
+		cp config.sample.inc.php config.inc.php
+
+	#modify the new copied file(config.inc.php)
+		goto "Authentication type" -> "Server parameter"
+
+		$cfg['Servers'][$i]['host'] = 'your database server url e.g(test.mariadb.database.azure.com)';
+
+	#change the modify file to read only mode.
+		chmod -v 0555 /home/site/wwwroot/config.inc.php
+	
+	"
+	-v = verbose (A diagnosis for all the processed files is issued after the shell command.)
+	0 = none
+	5 = read/execute
+
+	"
